@@ -7,11 +7,13 @@
       ],
       "env": {
         "CHROME_DEBUG_PORT": "9222"
-      }
+      },
+      "disabled": false
     },
     "context7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"]
+      "args": ["-y", "@upstash/context7-mcp@latest"],
+      "disabled": false
     }
   }
 }

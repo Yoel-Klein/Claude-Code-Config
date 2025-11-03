@@ -21,11 +21,16 @@ def run_git_command(args):
             ['git'] + args,
             capture_output=True,
             text=True,
-            check=True
+            check=True,
+            encoding='utf-8',
+            errors='replace'  # Replace decoding errors with replacement character
         )
         return result.stdout
     except subprocess.CalledProcessError as e:
         print(f"Git command failed: {e}", file=sys.stderr)
+        return ""
+    except Exception as e:
+        print(f"Command execution error: {e}", file=sys.stderr)
         return ""
 
 
@@ -52,6 +57,10 @@ def get_diff_content():
     # Exclude binary files (.tflite, .dll, .bin, .png, .jpg, etc.)
     # Use --unified=0 to reduce context lines (only show changed lines)
     diff = run_git_command(['diff', '--no-ext-diff', '--text', '--unified=1'])
+
+    # Handle None or empty diff
+    if not diff:
+        return ""
 
     # Limit output to prevent token waste on huge diffs
     lines = diff.split('\n')
