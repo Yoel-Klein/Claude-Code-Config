@@ -2,18 +2,41 @@
 
 Centralized Claude Code configuration for syncing across **all projects** and **all computers**.
 
+---
+
+## ⛔ WARNING: DO NOT USE DROPBOX FOR ~/.claude SYNC
+
+**We tried Dropbox symlink sync and it DOES NOT WORK. Here's why:**
+
+1. **Claude Code constantly writes small files** - `statsig/`, `telemetry/`, `todos/`, `file-history/` are updated every few seconds
+2. **Dropbox locks files while syncing** - This causes write failures and "device busy" errors
+3. **Dropbox fights back** - Even after deleting, Dropbox recreates folders during sync conflicts
+4. **Thousands of tiny files** - Claude generates 2,500+ small files that overwhelm Dropbox's sync
+5. **File conflicts everywhere** - You'll see "Conflicted Copy" files constantly
+
+**The cleanup script `cleanup-dropbox-sync.ps1` exists to UNDO this mistake.**
+
+### What DOES Work:
+- **Git-based sync** - Manual push/pull when switching computers
+- **Syncthing** - P2P sync that handles frequent small files better
+- **Just sync `settings.json` manually** - It's the only file that really matters
+
+---
+
 ## Two Types of Configuration
 
 | Type | Location | Purpose | Sync Method |
 |------|----------|---------|-------------|
-| **Project-level** | `.claude/` in project | Agents, skills, MCP servers | Git + Symlink |
-| **User-level** | `~/.claude/` | Settings, credentials, history | Dropbox + Symlink |
+| **Project-level** | `.claude/` in project | Agents, skills, MCP servers | Git + Symlink ✅ |
+| **User-level** | `~/.claude/` | Settings, credentials, history | ~~Dropbox~~ ❌ Use Git |
 
 ---
 
 ## 🖥️ Multi-Computer Sync (User-Level)
 
-Sync your Claude Code user settings, credentials, conversation history, and plugins across multiple computers using Dropbox.
+~~Sync your Claude Code user settings, credentials, conversation history, and plugins across multiple computers using Dropbox.~~
+
+**DEPRECATED: Dropbox sync does not work. See warning above.**
 
 ### What Gets Synced
 
